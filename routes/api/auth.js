@@ -7,13 +7,13 @@ const User = require("../../models/User");
 //@route GET api/auth
 //@ desc Test route
 //@access private
-//to use the middleware just add the file as a second pramater and route will be protected
+//to use the middleware just add the file as a second paramter and route will be protected
 router.get("/", auth, async (req, res) => {
   try {
     //since its a protected route n we use the token that has the ID
-    //in middelware we set the req.user to the user w/token
+    //in middleware we set the req.user to the user w/token
     // not returning password in json
-    const user = await User.findById(req.user).select("-password");
+    const user = await User.findById(req.user.id).select("-password");
     res.json(user);
   } catch (err) {
     console.error(err.message);

@@ -42,8 +42,8 @@ router.post(
       //Get user avatar
       const avatar = gravatar.url(email, {
         S: 200, //size
-        r: pg, //rating
-        d: mm, //default, blank user Image
+        r: "pg", //rating
+        d: "mm", //default, blank user Image
       });
 
       user = new User({
@@ -55,10 +55,11 @@ router.post(
 
       //Encrypt password using bcryptjs
       //using Await promise instead of then
+      //10 is the recommended number of rounds
       const salt = await bcrypt.genSalt(10);
       //hash password and save it to the user object
       user.password = await bcrypt.hash(password, salt);
-      //save user to DB
+      //save user to DB by mongoose
       await user.save();
       //Return jsonwebtoken
 

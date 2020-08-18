@@ -8,7 +8,7 @@ module.exports = function (req, res, next) {
 
   //check if no token
   if (!token) {
-    return res.status(401).json({ meg: "No Token, access denied" });
+    return res.status(401).json({ msg: "No Token, access denied" });
   }
 
   //verify the token if exist(jwt)

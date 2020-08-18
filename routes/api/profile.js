@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
+const { body, validationResult } = require("express-validator");
 
 // Profile & UserSchema
 const Profile = require("../../models/Profile");
@@ -25,5 +26,43 @@ router.get("/me", auth, async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+//@route   POST api/profile
+//@ desc   Create || update Prfile
+//@access  private
+//here using 2 middleware auth and express-validator
+router.post(
+  "/",
+  [
+    auth,
+    [
+      body("status", "Status is required").not().isEmpty(),
+      body("skills", "Skills are required").not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    //incase body is not validated
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      //400:bad request, send error message
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+      company,
+      website,
+      location,
+      bio,
+      status,
+      githubusername,
+      skills,
+      youtube,
+      facebook,
+      twitter,
+      instagram,
+      linkedin,
+    } = req.body;
+  }
+);
 
 module.exports = router;

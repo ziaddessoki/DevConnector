@@ -84,8 +84,27 @@ router.post(
     if (instagram) profileFields.social.instagram = instagram;
     if (linkedin) profileFields.social.linkedin = linkedin;
 
-    console.log(profileFields.skills);
-    res.send("hello");
+    try {
+      //find Profile
+      let profile = await Profile.findOne({ user: req.user.id });
+      //if profile found update it
+      if (profile) {
+        profile = await Profile.findOneAndUpdate(
+          { user: req.user.id },
+          { $set: profileFields },
+          { new: true }
+        );
+        res.json(profile);
+      }
+
+      //otherwise CREATE a new profile then save it to DB
+      profile = new Profile(profileFields);
+      await profile.save();
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
   }
 );
 

@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const gravatar = require("gravatar");
-var bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 const { body, validationResult } = require("express-validator");
 
 // UserSchema
@@ -36,7 +38,9 @@ router.post(
       let user = await User.findOne({ email });
       if (user) {
         //   if the user exist send bad request with message
-        res.status(400).json({ errors: [{ msg: "User Already Exist" }] });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "User Already Exist" }] });
       }
 
       //Get user avatar
@@ -61,9 +65,27 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
       //save user to DB by mongoose
       await user.save();
-      //Return jsonwebtoken
 
-      res.send("user registered");
+      //Return jsonwebtoken
+      const payload = {
+        user: {
+          //get mongoId
+          id: user.id,
+        },
+      };
+
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        //exp. is optional
+        { expiresIn: 3600 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+
+      //   res.send("user registered");
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");

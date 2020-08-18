@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const gravatar = require("gravatar");
+var bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 
+// UserSchema
 const User = require("../../models/User");
 
 //@route POST api/users
@@ -31,16 +34,33 @@ router.post(
       //see if user exists
       let user = await User.findOne({ email });
       if (user) {
+        //   if the user exist send bad request with message
         res.status(400).json({ errors: [{ msg: "User Already Exist" }] });
       }
 
       //Get user avatar
+      const avatar = gravatar.url(email, {
+        S: 200, //size
+        r: pg, //rating
+        d: mm, //default, blank user Image
+      });
 
-      //Encrypt password
+      user = new User({
+        name,
+        email,
+        password,
+        avatar,
+      });
 
+      //Encrypt password using bcryptjs
+      const salt = await bcrypt.genSalt(10);
+      //hash password and save it to the user object
+      user.password = await bcrypt.hash(password, salt);
+      //save user to DB
+      await user.save();
       //Return jsonwebtoken
 
-      res.send("user route");
+      res.send("user registered");
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");

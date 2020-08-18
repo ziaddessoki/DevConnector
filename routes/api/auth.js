@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const { body, validationResult } = require("express-validator");
@@ -51,34 +52,18 @@ router.post(
       //using Await promise instead of then
       let user = await User.findOne({ email });
       if (!user) {
-        //   if the user exist send bad request with message
+        //   if the user DONT exist send bad request with message
         return res
           .status(400)
           .json({ errors: [{ msg: "Account Don't Exist" }] });
       }
 
-      //Get user avatar
-      const avatar = gravatar.url(email, {
-        S: 200, //size
-        r: "pg", //rating
-        d: "robohash", //default, blank user Image
-      });
+      //compare between password entered by user and the encrypted password in the DB
+      const isMatched = await bcrypt.compare(password, user.password);
 
-      user = new User({
-        name,
-        email,
-        password,
-        avatar,
-      });
-
-      //Encrypt password using bcryptjs
-      //using Await promise instead of then
-      //10 is the recommended number of rounds
-      const salt = await bcrypt.genSalt(10);
-      //hash password and save it to the user object
-      user.password = await bcrypt.hash(password, salt);
-      //save user to DB by mongoose
-      await user.save();
+      if (!isMatched) {
+        return res.status(400).json({ errors: [{ msg: "Wrong Password" }] });
+      }
 
       //Return jsonwebtoken
       const payload = {

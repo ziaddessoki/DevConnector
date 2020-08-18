@@ -61,7 +61,7 @@ router.post(
       //using Await promise instead of then
       //10 is the recommended number of rounds
       const salt = await bcrypt.genSalt(10);
-      //hash password and save it to the user object
+      //hash password and save it to user object
       user.password = await bcrypt.hash(password, salt);
       //save user to DB by mongoose
       await user.save();

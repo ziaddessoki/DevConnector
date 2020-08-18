@@ -32,6 +32,7 @@ router.post(
 
     try {
       //see if user exists
+      //using Await promise instead of then
       let user = await User.findOne({ email });
       if (user) {
         //   if the user exist send bad request with message
@@ -53,6 +54,7 @@ router.post(
       });
 
       //Encrypt password using bcryptjs
+      //using Await promise instead of then
       const salt = await bcrypt.genSalt(10);
       //hash password and save it to the user object
       user.password = await bcrypt.hash(password, salt);

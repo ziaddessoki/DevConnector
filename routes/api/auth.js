@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
+const jwt = require("jsonwebtoken");
+const config = require("config");
+const { body, validationResult } = require("express-validator");
 
 const User = require("../../models/User");
 
@@ -21,17 +24,16 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-//@route POST api/users
-//@ desc Register User
+//@route POST api/auth
+//@ desc Authenicate user & get token (signIn)
 //@access public
 router.post(
   "/",
   [
     //adding second paramater for validation by express-validator
     //err message is optional
-    body("name", "Name is required").not().isEmpty(),
     body("email", "Please enter a valid email").isEmail(),
-    body("password", "Password: 6 char or more!!").isLength({ min: 6 }),
+    body("password", "Please Enter Password").exists(),
   ],
   async (req, res) => {
     //incase body is not validated
@@ -42,17 +44,17 @@ router.post(
     }
 
     //destructor
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
 
     try {
       //see if user exists
       //using Await promise instead of then
       let user = await User.findOne({ email });
-      if (user) {
+      if (!user) {
         //   if the user exist send bad request with message
         return res
           .status(400)
-          .json({ errors: [{ msg: "User Already Exist" }] });
+          .json({ errors: [{ msg: "Account Don't Exist" }] });
       }
 
       //Get user avatar

@@ -73,7 +73,7 @@ router.post(
           id: user.id,
         },
       };
-      //will use this to generate a token that will be used to access authenticated routes
+      //Generate a token(encoding user.id) that will be used to access authenticated routes
       jwt.sign(
         payload,
         config.get("jwtSecret"),

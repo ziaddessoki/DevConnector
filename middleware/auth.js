@@ -10,4 +10,16 @@ module.exports = function (req, res, next) {
   if (!token) {
     return res.status(401).json({ meg: "No Token, access denied" });
   }
+
+  //verify the token if exist(jwt)
+  try {
+    //decode the token to get user object(user.id)
+    const decoded = jwt.verify(token, config.get("jwtSecret"));
+
+    //grab user ID
+    req.user = decoded.user;
+    next(); // move with middleware
+  } catch (err) {
+    res.status(401).json({ msg: "Token not Valid" });
+  }
 };

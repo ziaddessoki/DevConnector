@@ -120,7 +120,7 @@ router.get("/", async (req, res) => {
 //@route   GET api/profile/user/:user_id
 //@ desc   Get user profile by user.ID
 //@access  public
-router.get("/", async (req, res) => {
+router.get("/user/:user_id", async (req, res) => {
   try {
     // getting all profiles from Profile collection w/ name and avatar from user DB
     const userProfile = await Profile.findOne({
@@ -130,6 +130,26 @@ router.get("/", async (req, res) => {
     if (!userProfile) return res.status(400).json({ msg: "Profile Not found" });
 
     res.json(userProfile);
+  } catch (err) {
+    console.error(err.message);
+    //incase sth other than ObjectID in Params throw 'profile not found'
+    if (err.kind == "ObjectId") {
+      return res.status(400).json({ msg: "Profile Not found" });
+    }
+    res.status(500).send("Server Error");
+  }
+});
+
+//@route   Delete api/profile
+//@ desc   Delete all user,profiles & posts
+//@access  private
+router.delete("/", auth, async (req, res) => {
+  try {
+    //
+    //
+    await Profile.findOneAndRemove({ user: req.user.id });
+    await User.findOneAndRemove({ _id: req.user.id });
+    res.json({ msg: "User Deleted" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

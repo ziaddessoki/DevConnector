@@ -146,8 +146,9 @@ router.get("/user/:user_id", async (req, res) => {
 router.delete("/", auth, async (req, res) => {
   try {
     //
-    //
+    //delete profile
     await Profile.findOneAndRemove({ user: req.user.id });
+    //delete User
     await User.findOneAndRemove({ _id: req.user.id });
     res.json({ msg: "User Deleted" });
   } catch (err) {
@@ -155,5 +156,22 @@ router.delete("/", auth, async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+//@route   PUT api/profile/experience
+//@ desc   add all experience to profile
+//@access  private
+//adding 2 middleware token & express validator
+router.put(
+  "/experience",
+  [
+    auth,
+    [
+      body("title", "Title is required!").not().isEmpty(),
+      body("company", "Company is required!").not().isEmpty(),
+      body("from", "From Date is required!").not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {}
+);
 
 module.exports = router;

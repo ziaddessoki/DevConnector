@@ -28,7 +28,7 @@ router.get("/me", auth, async (req, res) => {
 });
 
 //@route   POST api/profile
-//@ desc   Create || update Prfile
+//@ desc   Create || update Profile
 //@access  private
 //here using 2 middleware auth and express-validator
 router.post(
@@ -86,20 +86,12 @@ router.post(
 
     try {
       //find Profile
-      let profile = await Profile.findOne({ user: req.user.id });
-      //if profile found update it
-      if (profile) {
-        profile = await Profile.findOneAndUpdate(
-          { user: req.user.id },
-          { $set: profileFields },
-          { new: true }
-        );
-        res.json(profile);
-      }
-
-      //otherwise CREATE a new profile then save it to DB
-      profile = new Profile(profileFields);
-      await profile.save();
+      // Using upsert option (creates new doc if no match is found):
+      profile = await Profile.findOneAndUpdate(
+        { user: req.user.id },
+        { $set: profileFields },
+        { new: true, upsert: true }
+      );
       res.json(profile);
     } catch (err) {
       console.error(err.message);
@@ -107,5 +99,41 @@ router.post(
     }
   }
 );
+
+//@route   GET api/profile
+//@ desc   Get all profiles
+//@access  public
+router.get("/", async (req, res) => {
+  try {
+    // getting all profiles from Profile collection w/ name and avatar from user DB
+    const allProfiles = await Profile.find().populate("user", [
+      "name",
+      "avatar",
+    ]);
+    res.json(allProfiles);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+//@route   GET api/profile/user/:user_id
+//@ desc   Get user profile by user.ID
+//@access  public
+router.get("/", async (req, res) => {
+  try {
+    // getting all profiles from Profile collection w/ name and avatar from user DB
+    const userProfile = await Profile.findOne({
+      user: req.params.user_id,
+    }).populate("user", ["name", "avatar"]);
+
+    if (!userProfile) return res.status(400).json({ msg: "Profile Not found" });
+
+    res.json(userProfile);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 module.exports = router;

@@ -85,7 +85,7 @@ router.post(
     if (linkedin) profileFields.social.linkedin = linkedin;
 
     try {
-      //find Profile
+      //find Profile & update it
       // Using upsert option (creates new doc if no match is found):
       profile = await Profile.findOneAndUpdate(
         { user: req.user.id },
@@ -171,7 +171,38 @@ router.put(
       body("from", "From Date is required!").not().isEmpty(),
     ],
   ],
-  async (req, res) => {}
+  async (req, res) => {
+    //incase body is not validated
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      //400:bad request, send error message
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {
+      title,
+      company,
+      location,
+      from,
+      to,
+      current,
+      description,
+    } = req.body;
+
+    //building newExp object to send to DB {title:title}
+    const newExp = { title, company, location, from, to, current, description };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      profile.experience.unshift(newExp);
+      await profile.save();
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("server Error");
+    }
+  }
 );
 
 module.exports = router;

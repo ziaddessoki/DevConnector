@@ -140,8 +140,8 @@ router.get("/user/:user_id", async (req, res) => {
   }
 });
 
-//@route   Delete api/profile
-//@ desc   Delete all user,profiles & posts
+//@route   DELETE api/profile
+//@ desc   Delete  user,profiles & posts
 //@access  private
 router.delete("/", auth, async (req, res) => {
   try {
@@ -204,5 +204,10 @@ router.put(
     }
   }
 );
+
+//@route   DELETE api/profile/experience/:exp_id
+//@ desc   add all experience to profile
+//@access  private
+router.delete("/experience/:exp_id", auth, async (req, res) => {});
 
 module.exports = router;

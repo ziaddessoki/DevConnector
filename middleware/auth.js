@@ -16,7 +16,7 @@ module.exports = function (req, res, next) {
     //decode the token to get user object(user.id)
     const decoded = jwt.verify(token, config.get("jwtSecret"));
 
-    //grab user ID
+    //grab user ID, will be used in routes(req.user.id)
     req.user = decoded.user;
     next(); // move with middleware
   } catch (err) {

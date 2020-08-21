@@ -42,4 +42,35 @@ router.post(
   }
 );
 
+//@route GET api/posts
+//@ desc GET All posts
+//@access private
+router.get("/", auth, async (req, res) => {
+  try {
+    const posts = await Posts.find().sort({ date: -1 });
+    res.json(posts);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server Error");
+  }
+});
+
+//@route GET api/posts/:id
+//@ desc GET post by id
+//@access private
+router.get("/:id", auth, async (req, res) => {
+  try {
+    const post = await Posts.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found" });
+    }
+    res.json(post);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectID") {
+      return res.status(404).json({ msg: "Post not found" });
+    }
+    res.status(500).send("server Error");
+  }
+});
 module.exports = router;

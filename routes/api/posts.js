@@ -55,7 +55,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-//@route GET api/posts/:id
+//@route GET api/posts/:postId
 //@ desc GET post by id
 //@access private
 router.get("/:id", auth, async (req, res) => {
@@ -74,7 +74,7 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
-//@route DELETE api/posts/:id
+//@route DELETE api/posts/:postId
 //@ desc DELETE post by id
 //@access private
 router.delete("/:id", auth, async (req, res) => {
@@ -102,7 +102,7 @@ router.delete("/:id", auth, async (req, res) => {
   }
 });
 
-//@route PUT api/posts/like/:id
+//@route PUT api/posts/like/:postId
 //@ desc like a post
 //@access private
 router.put("/like/:id", auth, async (req, res) => {
@@ -127,7 +127,7 @@ router.put("/like/:id", auth, async (req, res) => {
   }
 });
 
-//@route PUT api/posts/unlike/:id
+//@route PUT api/posts/unlike/:postId
 //@ desc unlike a post
 //@access private
 router.put("/unlike/:id", auth, async (req, res) => {
@@ -155,7 +155,7 @@ router.put("/unlike/:id", auth, async (req, res) => {
   }
 });
 
-//@route POST api/posts/comment/:id
+//@route POST api/posts/comment/:postId
 //@ desc  create comment
 //@access private
 router.post(
@@ -192,4 +192,34 @@ router.post(
     }
   }
 );
+
+//@route DELETE api/posts/comment/:postId/:comment_id
+//@ desc  Delete comment
+//@access private
+router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
+  try {
+    //grab post from users & posts Collections
+    const post = await Posts.findById(req.params.id);
+
+    //check if comment was made by logged user
+    if (
+      post.comments.filter((comment) => comment.user.toString() === req.user.id)
+        .length === 0
+    ) {
+      return res.status(400).json({ msg: "Unauthorized to delete" });
+    }
+    //get comment index from post.comments array
+    const removeIndex = post.comments
+      .map((comment) => comment._id.toString())
+      .indexOf(req.params.comment_id);
+    //delct comment form array
+    post.comments.splice(removeIndex, 1);
+    await post.save();
+
+    res.json(post.comments);
+  } catch (err) {
+    console.error(err.message);
+    res.send(500).send("Server Error");
+  }
+});
 module.exports = router;

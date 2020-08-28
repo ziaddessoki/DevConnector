@@ -10,7 +10,6 @@ export const register = ({ name, email, password }) => async dispatch => {
         }
     }
     const body = JSON.stringify({ name, email, password });
-    console.log(body)
 
     try {
         const res = await axios.post('/api/users', body, config);
@@ -20,7 +19,6 @@ export const register = ({ name, email, password }) => async dispatch => {
             payload: res.data
         })
     } catch (err) {
-        console.log(err.response)
         const errors = err.response.data.errors;
         if (errors) {
             errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))

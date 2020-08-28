@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth.js'
 import PropTypes from 'prop-types'
 
 
-const Register = (props) => {
+export const Register = (props) => {
 
     const [formData, setFormData] = useState({
         name: '',
@@ -25,24 +26,25 @@ const Register = (props) => {
         if (password !== password2) {
             props.setAlert("Password Don't Match", "danger")
         } else {
+            props.register({ name, email, password })
             //create a new user object to be the body
-            const newUser = {
-                name: name,
-                email: email,
-                password: password,
-            }
-            try {
-                const config = {
-                    headers: {
-                        "content-type": "application/json"
-                    }
-                }
-                const body = JSON.stringify(newUser)
-                const res = await axios.post("/api/users", body, config);
-                console.log(res.data)
-            } catch (err) {
-                console.log(err.response.data)
-            }
+            // const newUser = {
+            //     name: name,
+            //     email: email,
+            //     password: password,
+            // }
+            // try {
+            //     const config = {
+            //         headers: {
+            //             "content-type": "application/json"
+            //         }
+            //     }
+            //     const body = JSON.stringify(newUser)
+            //     const res = await axios.post("/api/users", body, config);
+            //     console.log(res.data)
+            // } catch (err) {
+            //     console.log(err.response.data)
+            // }
         }
     }
 
@@ -57,14 +59,17 @@ const Register = (props) => {
                         name="name"
                         value={name}
                         onChange={e => onChange(e)}
-                        required />
+                    // required 
+                    />
                 </div>
                 <div className="form-group">
                     <input type="email"
                         placeholder="Email Address"
                         name="email"
                         value={email}
-                        onChange={e => onChange(e)} />
+                        onChange={e => onChange(e)}
+                    // required  
+                    />
                     <small className="form-text"
                     >This site uses Gravatar so if you want a profile image, use a
             Gravatar email</small
@@ -75,7 +80,7 @@ const Register = (props) => {
                         type="password"
                         placeholder="Password"
                         name="password"
-                        minLength="6"
+                        // minLength="6"
                         value={password}
                         onChange={e => onChange(e)}
                     />
@@ -85,7 +90,7 @@ const Register = (props) => {
                         type="password"
                         placeholder="Confirm Password"
                         name="password2"
-                        minLength="6"
+                        // minLength="6"
                         value={password2}
                         onChange={e => onChange(e)}
                     />
@@ -101,6 +106,8 @@ const Register = (props) => {
 
 Register.prototypes = {
     setAlert: PropTypes.func.isRequired,
-};
+}
+
+export default connect(null, { setAlert, register })(Register);
+
 {/* getting assess to get state action as props.setAlert */ }
-export default connect(null, { setAlert })(Register);

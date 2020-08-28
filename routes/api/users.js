@@ -19,7 +19,7 @@ router.post(
     //err message is optional
     body("name", "Name is required").not().isEmpty(),
     body("email", "Please enter a valid email").isEmail(),
-    body("password", "Password: 6 char or more!!").isLength({ min: 6 }),
+    body("password", "Password: 6 characters or more!!").isLength({ min: 6 }),
   ],
   async (req, res) => {
     //incase body is not validated

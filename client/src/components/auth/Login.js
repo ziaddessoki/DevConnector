@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { login } from '../../actions/auth'
 import { setAlert } from '../../actions/alert'
+import PropTypes from 'prop-types'
 
 
 const Login = (props) => {
@@ -56,6 +57,10 @@ const Login = (props) => {
             </p>
         </Fragment>
     )
+}
+Login.propTypes = {
+    setAlert: PropTypes.func.isRequired,
+    login: PropTypes.func.isRequired,
 }
 
 export default connect(null, { login, setAlert })(Login);

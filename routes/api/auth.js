@@ -26,12 +26,12 @@ router.get("/", auth, async (req, res) => {
 });
 
 //@route POST api/auth
-//@ desc Authenicate user & get token (signIn)
+//@ desc Authenticate user & get token (signIn)
 //@access public
 router.post(
   "/",
   [
-    //adding second paramater for validation by express-validator
+    //adding second paramter for validation by express-validator
     //err message is optional
     body("email", "Please enter a valid email").isEmail(),
     body("password", "Please Enter Password").exists(),

@@ -104,8 +104,9 @@ export const Register = (props) => {
     )
 }
 
-Register.prototypes = {
+Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired,
 }
 
 export default connect(null, { setAlert, register })(Register);

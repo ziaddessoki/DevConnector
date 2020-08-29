@@ -3,7 +3,8 @@ import {
     REGISTER_FAIL,
     USER_LOADER,
     AUTH_ERROR,
-    LOGIN_SUCCESS
+    LOGIN_SUCCESS,
+    LOGIN_FAIL
 } from '../actions/types';
 
 const initialState = {

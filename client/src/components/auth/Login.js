@@ -27,7 +27,7 @@ const Login = (props) => {
 
     }
     //Redirect if logged in
-    if (isAuthenticated) {
+    if (props.isAuthenticated) {
         return <Redirect to='/dashboard' />
     }
 
@@ -69,7 +69,9 @@ Login.propTypes = {
 }
 
 const mapStateToProps = state => {
-    isAuthenticated: state.auth.isAuthenticated
-}
+    return {
+        isAuthenticated: state.auth.isAuthenticated
+    }
+};
 
-export default connect(null, { login, setAlert })(Login);
+export default connect(mapStateToProps, { login, setAlert })(Login);

@@ -87,3 +87,9 @@ export const register = ({ name, email, password }) => async dispatch => {
         })
     }
 }
+
+
+//logout /clear Profile
+export const logout = () => dispatch => {
+
+}

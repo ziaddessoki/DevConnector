@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react'
 import { Link, Redirect } from 'react-router-dom';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth.js'
@@ -105,8 +104,9 @@ export const Register = (props) => {
                 Already have an account? <Link to="/login">Sign In</Link>
             </p>
         </Fragment>
-    )
-}
+    );
+};
+
 
 Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
@@ -114,12 +114,10 @@ Register.propTypes = {
     isAuthenticated: PropTypes.bool,
 }
 
-const mapStateToProps = state => {
-    return {
-        isAuthenticated: state.auth.isAuthenticated
-    }
-};
+const mapStateToProps = state => ({
+
+    isAuthenticated: state.auth.isAuthenticated
+
+});
 
 export default connect(mapStateToProps, { setAlert, register })(Register);
-
-{/* getting assess to get state action as props.setAlert */ }

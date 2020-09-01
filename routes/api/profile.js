@@ -9,7 +9,7 @@ const { body, validationResult } = require("express-validator");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 
-//@route   GET api/profile/me
+//@route   GET /api/profile/me
 //@ desc   get user profile
 //@access  private
 //to use the middleware just add the file as a second paramter and route will be protected

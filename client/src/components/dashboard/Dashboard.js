@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getCurrentProfile } from "../../actions/profile";
+import Spinner from "../layout/Spinner";
 
 const Dashboard = (props) => {
   //since its functional component, useEffect for lifeCycle
@@ -10,7 +12,29 @@ const Dashboard = (props) => {
   useEffect(() => {
     props.getCurrentProfile();
   }, [getCurrentProfile]);
-  return <div>dashboard</div>;
+  return props.profile.profile === null && props.profile.loading ? (
+    <Spinner />
+  ) : (
+    <Fragment>
+      <h1 className="large text-primary">Dashboard</h1>
+      <p className="lead">
+        {/* if auth.user then render .name */}
+        <i className="fas fa-user" /> Welcome{" "}
+        {props.auth.user && props.auth.user.name}
+      </p>
+      {/* check if the user have a profile */}
+      {props.profile.profile !== null ? (
+        <Fragment>has</Fragment>
+      ) : (
+        <Fragment>
+          <p>You didn't setup your profile yet, please create one!!</p>
+          <Link to="/create-profile" className="btn btn-primary my-1">
+            Create Profile
+          </Link>
+        </Fragment>
+      )}
+    </Fragment>
+  );
 };
 
 Dashboard.propTypes = {

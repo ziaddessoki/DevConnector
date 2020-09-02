@@ -4,27 +4,34 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getCurrentProfile } from "../../actions/profile";
 import Spinner from "../layout/Spinner";
+import DashboardActions from "./DashboardActions";
 
-const Dashboard = (props) => {
+//disonstructing props
+const Dashboard = ({
+  getCurrentProfile,
+  auth: { user },
+  profile: { profile, loading },
+}) => {
   //since its functional component, useEffect for lifeCycle
   //[] is added a second param its would act as 'componentWillMount' just load ONCE
   //else it will keep running
   useEffect(() => {
-    props.getCurrentProfile();
+    getCurrentProfile();
   }, [getCurrentProfile]);
-  return props.profile.profile === null && props.profile.loading ? (
+  return profile === null && loading ? (
     <Spinner />
   ) : (
     <Fragment>
       <h1 className="large text-primary">Dashboard</h1>
       <p className="lead">
         {/* if auth.user then render .name */}
-        <i className="fas fa-user" /> Welcome{" "}
-        {props.auth.user && props.auth.user.name}
+        <i className="fas fa-user" /> Welcome {user && user.name}
       </p>
       {/* check if the user have a profile */}
-      {props.profile.profile !== null ? (
-        <Fragment>has</Fragment>
+      {profile !== null ? (
+        <Fragment>
+          <DashboardActions />
+        </Fragment>
       ) : (
         <Fragment>
           <p>You didn't setup your profile yet, please create one!!</p>

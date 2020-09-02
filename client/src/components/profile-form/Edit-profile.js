@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { createProfile, getCurrentProfile } from "../../actions/profile";
-import profile from "../../reducers/profile";
 
 const EditProfile = ({
   getCurrentProfile,
@@ -42,16 +41,13 @@ const EditProfile = ({
       githubusername:
         loading || !profile.githubusername ? "" : profile.githubusername,
       bio: loading || !profile.bio ? "" : profile.bio,
-      twitter: loading || !profile.social.twitter ? "" : profile.social.twitter,
-      facebook:
-        loading || !profile.social.facebook ? "" : profile.social.facebook,
-      linkedin:
-        loading || !profile.social.linkedin ? "" : profile.social.linkedin,
-      youtube: loading || !profile.social.youtube ? "" : profile.social.youtube,
-      instagram:
-        loading || !profile.social.instagram ? "" : profile.social.instagram,
+      twitter: loading || !profile.social ? "" : profile.social.twitter,
+      facebook: loading || !profile.social ? "" : profile.social.facebook,
+      linkedin: loading || !profile.social ? "" : profile.social.linkedin,
+      youtube: loading || !profile.social ? "" : profile.social.youtube,
+      instagram: loading || !profile.social ? "" : profile.social.instagram,
     });
-  }, [loading]);
+  }, [loading, getCurrentProfile, profile]);
 
   const {
     company,
@@ -73,7 +69,7 @@ const EditProfile = ({
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    createProfile(formData, history);
+    createProfile(formData, history, true);
   };
   return (
     <Fragment>
@@ -249,17 +245,17 @@ const EditProfile = ({
         <input
           type="submit"
           className="btn btn-primary my-1"
-          value="CreateProfile"
+          value="Edit Profile"
         />
-        <a className="btn btn-light my-1" href="dashboard.html">
+        <Link className="btn btn-light my-1" to="/dashboard">
           Go Back
-        </a>
+        </Link>
       </form>
     </Fragment>
   );
 };
 
-CreateProfile.propTypes = {
+EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,

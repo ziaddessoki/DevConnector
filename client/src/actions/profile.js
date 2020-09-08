@@ -1,6 +1,11 @@
 import axios from "axios";
 import { setAlert } from "./alert";
-import { GET_PROFILE, PROFILE_ERROR, UPDATE_PROFILE } from "./types";
+import {
+  GET_PROFILE,
+  PROFILE_ERROR,
+  UPDATE_PROFILE,
+  DELETE_ACCOUNT,
+} from "./types";
 
 // get current user profile
 export const getCurrentProfile = () => async (dispatch) => {
@@ -120,9 +125,9 @@ export const addEdu = (formData, history) => async (dispatch) => {
 };
 
 //Delete experience
-export const deleteExp = (id) => async (dispatch) => {
+export const deleteExp = (exp_id) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/profile/experience/${id}`);
+    const res = await axios.delete(`/api/profile/experience/${exp_id}`);
 
     dispatch({
       type: UPDATE_PROFILE,
@@ -139,9 +144,9 @@ export const deleteExp = (id) => async (dispatch) => {
 };
 
 //Delete education
-export const deleteEdu = (id) => async (dispatch) => {
+export const deleteEdu = (edu_id) => async (dispatch) => {
   try {
-    const res = await axios.delete(`/api/profile/education/${id}`);
+    const res = await axios.delete(`/api/profile/education/${edu_id}`);
 
     dispatch({
       type: UPDATE_PROFILE,
@@ -154,5 +159,24 @@ export const deleteEdu = (id) => async (dispatch) => {
       //to get err msg and status set at the backend
       payload: { msg: err.response.statusText, status: err.response.status },
     });
+  }
+};
+
+//Delete Profile & account
+export const deleteAccount = () => async (dispatch) => {
+  if (window.confirm("Are you sure you want to delete your account?!")) {
+    try {
+      const res = await axios.delete("/api/profile/");
+
+      dispatch({ type: UPDATE_PROFILE });
+      dispatch({ DELETE_ACCOUNT });
+      dispatch(setAlert("ACCOUNT BEEN DELETED"));
+    } catch (err) {
+      dispatch({
+        type: PROFILE_ERROR,
+        //to get err msg and status set at the backend
+        payload: { msg: err.response.statusText, status: err.response.status },
+      });
+    }
   }
 };

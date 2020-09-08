@@ -5,6 +5,7 @@ import {
   PROFILE_ERROR,
   UPDATE_PROFILE,
   DELETE_ACCOUNT,
+  CLEAR_PROFILE,
 } from "./types";
 
 // get current user profile
@@ -133,7 +134,7 @@ export const deleteExp = (exp_id) => async (dispatch) => {
       type: UPDATE_PROFILE,
       payload: res.data,
     });
-    dispatch(setAlert("Experience Removed", "Success"));
+    dispatch(setAlert("Experience Removed", "success"));
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
@@ -152,7 +153,7 @@ export const deleteEdu = (edu_id) => async (dispatch) => {
       type: UPDATE_PROFILE,
       payload: res.data,
     });
-    dispatch(setAlert("Education Removed", "Success"));
+    dispatch(setAlert("Education Removed", "success"));
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
@@ -166,10 +167,10 @@ export const deleteEdu = (edu_id) => async (dispatch) => {
 export const deleteAccount = () => async (dispatch) => {
   if (window.confirm("Are you sure you want to delete your account?!")) {
     try {
-      const res = await axios.delete("/api/profile/");
+      await axios.delete("/api/profile/");
 
-      dispatch({ type: UPDATE_PROFILE });
-      dispatch({ DELETE_ACCOUNT });
+      dispatch({ type: CLEAR_PROFILE });
+      dispatch({ type: DELETE_ACCOUNT });
       dispatch(setAlert("ACCOUNT BEEN DELETED"));
     } catch (err) {
       dispatch({

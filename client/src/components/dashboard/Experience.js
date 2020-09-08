@@ -6,7 +6,7 @@ import { deleteExp } from "../../actions/profile";
 
 const Experience = (props) => {
   const experiences = props.experience.map((exp) => (
-    <tr key={exp.id}>
+    <tr key={exp._id}>
       <td>{exp.company}</td>
       <td className="hide-sm">{exp.title}</td>
       <td>
@@ -20,7 +20,7 @@ const Experience = (props) => {
       <td>
         <button
           className="btn btn-danger"
-          onClick={() => props.deleteExp(exp.id)}
+          onClick={() => props.deleteExp(exp._id)}
         >
           Delete
         </button>

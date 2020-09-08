@@ -6,7 +6,7 @@ import { deleteEdu } from "../../actions/profile";
 
 const Education = (props) => {
   const educations = props.education.map((edu) => (
-    <tr key={edu.id}>
+    <tr key={edu._id}>
       <td>{edu.school}</td>
       <td className="hide-sm">{edu.degree}</td>
       <td className="hide-sm">{edu.fieldOfStudy}</td>
@@ -21,7 +21,7 @@ const Education = (props) => {
       <td>
         <button
           className="btn btn-danger"
-          onClick={() => props.deleteEdu(edu.id)}
+          onClick={() => props.deleteEdu(edu._id)}
         >
           Delete
         </button>

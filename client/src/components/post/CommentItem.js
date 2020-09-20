@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const CommentItem = (props) => {
+const CommentItem = ({ postID }) => {
   return <div></div>;
 };
 

@@ -25,7 +25,7 @@ const Profiles = ({ getAllProfiles, profile: { profiles, loading } }) => {
                 <ProfileItem key={profile._id} profile={profile} />
               ))
             ) : (
-              <h4>404 - No Profiles Found!</h4>
+              <h4>404 - No Profiles Found</h4>
             )}
           </div>
         </Fragment>

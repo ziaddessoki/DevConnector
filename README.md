@@ -15,10 +15,12 @@ https://zdev-connector.herokuapp.com/
 - by clicking on one profile image, a developer profile will be displayed with all its info
 - also developers can communicate and interact from the posts page where they can open topics and comment(replay) or even like each others post.
 
-<br/><strong>Customize Your Burger </strong><br/> ![Login](./assets/Customize.png)
-<br/><strong>Burger Summary</strong> <br/> ![Login](./assets/burgerSummary.png)
+<br/><strong>Home Page </strong><br/> ![Login](./assets/Home page.png)
+<br/><strong>Sign up</strong> <br/> ![Login](./assets/Sign up.png)
 
-<br/><strong>Order Summary </strong> <br/> ![Login](./assets/orderSummary.png)
+<br/><strong>Profiles list</strong> <br/> ![Login](./assets/profiles.png)
+<br/><strong>Profile Display</strong> <br/> ![Login](./assets/profile.png)
+<br/><strong>Posts</strong> <br/> ![Login](./assets/posts.png)
 
 # Technologies Used
 

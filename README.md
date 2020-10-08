@@ -25,9 +25,13 @@ https://zdev-connector.herokuapp.com/
 # Technologies Used
 
 - React
+- Redux
 - Javascript
 - CSS Module
 - MongoDB Atlas
-- Firebase
-- Redux
+- mongoose
+- bcryptjs
+- express
+- express-validator
 - Webpack
+- jsonwebtoke

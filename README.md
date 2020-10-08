@@ -15,8 +15,8 @@ https://zdev-connector.herokuapp.com/
 - by clicking on one profile image, a developer profile will be displayed with all its info
 - also developers can communicate and interact from the posts page where they can open topics and comment(replay) or even like each others post.
 
-<br/><strong>Home Page </strong><br/> ![Login](./assets/Home page.png)
-<br/><strong>Sign up</strong> <br/> ![Login](./assets/Sign up.png)
+<br/><strong>Home Page </strong><br/> ![Login](./assets/homePage.png)
+<br/><strong>Sign up</strong> <br/> ![Login](./assets/signUp.png)
 
 <br/><strong>Profiles list</strong> <br/> ![Login](./assets/profiles.png)
 <br/><strong>Profile Display</strong> <br/> ![Login](./assets/profile.png)

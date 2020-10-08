@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addComment, removeComment } from "../../actions/post";
+import { addComment } from "../../actions/post";
 
 const CommentForm = ({ postID, addComment }) => {
   const [text, setText] = useState("");

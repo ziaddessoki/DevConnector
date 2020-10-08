@@ -4,6 +4,7 @@ const config = require("config");
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const { body, validationResult } = require("express-validator");
+const normalize = require("normalize-url");
 
 // Profile & UserSchema
 const Profile = require("../../models/Profile");
@@ -66,26 +67,51 @@ router.post(
       linkedin,
     } = req.body;
 
-    //build profile object
-    const profileFields = {};
-    profileFields.user = req.user.id;
-    if (company) profileFields.company = company;
-    if (website) profileFields.website = website;
-    if (location) profileFields.location = location;
-    if (bio) profileFields.bio = bio;
-    if (status) profileFields.status = status;
-    if (githubusername) profileFields.githubusername = githubusername;
-    if (skills) {
-      profileFields.skills = skills.split(",").map((skill) => skill.trim());
-    }
+    // //build profile object
+    // const profileFields = {};
+    // profileFields.user = req.user.id;
+    // if (company) profileFields.company = company;
+    // if (website) profileFields.website = website;
+    // if (location) profileFields.location = location;
+    // if (bio) profileFields.bio = bio;
+    // if (status) profileFields.status = status;
+    // if (githubusername) profileFields.githubusername = githubusername;
+    // if (skills) {
+    //   profileFields.skills = skills.split(",").map((skill) => skill.trim());
+    // }
 
-    //build social object
-    profileFields.social = {};
-    if (youtube) profileFields.social.youtube = youtube;
-    if (twitter) profileFields.social.twitter = twitter;
-    if (facebook) profileFields.social.facebook = facebook;
-    if (instagram) profileFields.social.instagram = instagram;
-    if (linkedin) profileFields.social.linkedin = linkedin;
+    // //build social object
+    // profileFields.social = {};
+    // if (youtube) profileFields.social.youtube = youtube;
+    // if (twitter) profileFields.social.twitter = twitter;
+    // if (facebook) profileFields.social.facebook = facebook;
+    // if (instagram) profileFields.social.instagram = instagram;
+    // if (linkedin) profileFields.social.linkedin = linkedin;
+
+    const profileFields = {
+      user: req.user.id,
+      company,
+      location,
+      website:
+        website && website !== ""
+          ? normalize(website, { forceHttps: true })
+          : "",
+      bio,
+      skills: Array.isArray(skills)
+        ? skills
+        : skills.split(",").map((skill) => " " + skill.trim()),
+      status,
+      githubusername,
+    };
+
+    // Build social object and add to profileFields
+    const socialfields = { youtube, twitter, instagram, linkedin, facebook };
+
+    for (const [key, value] of Object.entries(socialfields)) {
+      if (value && value.length > 0)
+        socialfields[key] = normalize(value, { forceHttps: true });
+    }
+    profileFields.social = socialfields;
 
     try {
       //find Profile & update it
@@ -93,7 +119,7 @@ router.post(
       profile = await Profile.findOneAndUpdate(
         { user: req.user.id },
         { $set: profileFields },
-        { new: true, upsert: true }
+        { new: true, upsert: true, setDefaultsOnInsert: true }
       );
       res.json(profile);
     } catch (err) {
